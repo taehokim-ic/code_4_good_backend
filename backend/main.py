@@ -24,15 +24,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get('/')
+def default():
+    return {"message": "invalid API endpoint"}
+
+
 @app.post('/ignitehub/api/v1/register')
-def process_message(student_data: StudentData = None):
+def register_student(student_data: StudentData = None):
     
-    registered = register_student(student_data=student_data)
+    registered = registered_student(student_data=student_data)
     
     if registered:
         return {"message": "Success"} 
     else:
         return {"message": "Fail"}
+   
+@app.post('/ignitehub/api/v1/add_event')
+def add_event(event: EventData):
+    
+    add_event_at_specific_date(event_data=event)
+
+    # Error Handling Required in the Future
+
+@app.get('/ignitehub/api/v1/events')
+def events_get():
+    events = get_event_on_or_after_specific_date(datetime.today())
+
+    return {"events": events}
+    
+@app.get('/ignitehub/api/v1/event_today')
+def get_event_today():
+    events = get_event_at_specific_date(datetime.today())
+    
+    return {"events": events}
     
 if __name__ == "__main__":
    uvicorn.run(app, host="127.0.0.1", port=8000)
