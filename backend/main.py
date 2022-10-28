@@ -1,17 +1,12 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
+import uvicorn
+from query import *
 
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
 app = FastAPI()
-
-random_messages = [
-    "This is the result you're looking for",
-    "Please follow the link for more information"
-]
 
 async def catch_exceptions_middleware(request: Request, call_next):
     try:
@@ -29,24 +24,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class StudentData(BaseModel):
-    username: str
-    name: str
-    mem_word: str
-    
-    
-    class Config:
-        orm_mode = True
-
 @app.post('/ignitehub/api/v1/register')
 def process_message(student_data: StudentData = None):
     
-    add_message(message=message)
+    registered = register_student(student_data=student_data)
     
-    if not link:
-        return {
-            "message": "Success"
-        }
-    return {
-        "message": "Fail"
-    }
+    if registered:
+        return {"message": "Success"} 
+    else:
+        return {"message": "Fail"}
+    
+if __name__ == "__main__":
+   uvicorn.run(app, host="127.0.0.1", port=8000)
