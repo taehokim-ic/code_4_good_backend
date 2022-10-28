@@ -45,6 +45,8 @@ def register_student(student_data: StudentData = None):
 def add_event(event: EventData):
     
     add_event_at_specific_date(event_data=event)
+    
+    return {"message": "Event Added!"}
 
     # Error Handling Required in the Future
 
@@ -53,14 +55,14 @@ def add_event(event: EventData):
 def events_get():
     events = get_event_on_or_after_specific_date(datetime.today())
 
-    return {"events": events}
+    return {"events": [event for event in events]}
     
 # Events Available Today
 @app.get('/ignitehub/api/v1/event_today')
 def get_event_today():
     events = get_event_at_specific_date(datetime.today())
     
-    return {"events": events}
+    return {"events": [event for event in events]}
     
 if __name__ == "__main__":
    uvicorn.run(app, host="127.0.0.1", port=8000)
