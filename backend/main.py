@@ -24,11 +24,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Invalid Endpoint
 @app.get('/')
 def default():
     return {"message": "invalid API endpoint"}
 
-
+# Student Register
 @app.post('/ignitehub/api/v1/register')
 def register_student(student_data: StudentData = None):
     
@@ -39,6 +40,7 @@ def register_student(student_data: StudentData = None):
     else:
         return {"message": "Fail"}
    
+# Add Event
 @app.post('/ignitehub/api/v1/add_event')
 def add_event(event: EventData):
     
@@ -46,12 +48,14 @@ def add_event(event: EventData):
 
     # Error Handling Required in the Future
 
+# Get Future Events
 @app.get('/ignitehub/api/v1/events')
 def events_get():
     events = get_event_on_or_after_specific_date(datetime.today())
 
     return {"events": events}
     
+# Events Available Today
 @app.get('/ignitehub/api/v1/event_today')
 def get_event_today():
     events = get_event_at_specific_date(datetime.today())
