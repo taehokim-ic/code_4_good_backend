@@ -8,7 +8,8 @@ class Student(SQLModel, table=True):
     name: str = Field(index=True)
     user_name: str
     mem_word: str
-    
+    birthdate: str
+
 class Events(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True)
     name: str = Field(index=True)
