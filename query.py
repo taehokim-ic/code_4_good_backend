@@ -68,8 +68,7 @@ def check_if_student_exists(student_data: StudentData, table=Student):
 # Checks if student exists in check_in
 def check_if_student_exists_check_in(student_data: StudentData, table=CheckIn):
     with Session(engine) as session:
-        statement = select(table).where(table.user_name==student_data.user_name,
-                                        table.mem_word==student_data.mem_word)
+        statement = select(table).where(table.user_name==student_data.user_name)
         result = session.exec(statement=statement).all()
         
         # No student found
@@ -134,6 +133,7 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
     added_student = check_if_student_exists_check_in(
         StudentData(user_name=event_data.user_name, 
                     mem_word=event_data.mem_word), table=verify_table)
+    print(added_event, added_student)
     flag = added_event and added_student
     with Session(engine) as session:
         if flag:
@@ -151,8 +151,8 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
                     name=event_data.name,
                     date=event_data.date,
                     user_name=event_data.user_name,
-                    feedback_star=event_data.feedbacK_star,
-                    feedbacK_msg=event_data.feedbacK_msg
+                    feedback_star=event_data.feedback_star,
+                    feedbacK_msg=event_data.feedback_message
                 ))
         
         session.commit()
@@ -195,13 +195,22 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
 
         
 if __name__ == "__main__":
-    object = CheckInData(name="Introduction To Python",
-                date=datetime(2022, 10, 28).date(),
-                student_name="Mike Hawk",
-                user_name="fuzzywuzzy",
-                mem_word="insomnia")
-    print(add_check_in(object))
-    print(get_event_at_specific_date)
+    object = EventFeedbackData(
+        name = "Introduction To Python",
+        date = "2022-10-29",
+        user_name = "fuzzywuzzy",
+        mem_word = "insomnia",
+        feedback_star= 40,
+        feedback_message= "terrible"
+    )
+    print(add_check_out(object))
+    # object = CheckInData(name="Introduction To Python",
+    #             date=datetime(2022, 10, 28).date(),
+    #             student_name="Mike Hawk",
+    #             user_name="fuzzywuzzy",
+    #             mem_word="insomnia")
+    # print(add_check_in(object))
+    # print(get_event_at_specific_date)
     # new_student = StudentData(user_name="fuzzywuzzy", 
     #                           name="Mike Hawk", 
     #                           mem_word="insomnia")
