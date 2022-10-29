@@ -261,7 +261,22 @@ if __name__ == "__main__":
         feedback_message = "terrible"
     )
     
-    add_check_out(object)
+    object1 = CheckInData(name="Introduction To Python",
+                date=datetime(2022, 11, 12).date(),
+                student_name="John Doe",
+                user_name="buzzywuzzy",
+                mem_word="overworked")
+    add_check_in(object1)
     
+    object1 = EventFeedbackData(
+        name = "Introduction To Python",
+        date = "2022-11-12",
+        user_name = "buzzywuzzy",
+        mem_word = "overworkd",
+        feedback_star= "69",
+        feedback_message = "average"
+    )
+    add_check_out(object)
+    add_check_out(object1)
     
     # print(get_all_events())
