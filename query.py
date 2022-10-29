@@ -28,7 +28,7 @@ class CheckInData(BaseModel):
 
 class EventFeedbackData(BaseModel):
     name: str
-    data: date
+    date: date
     user_name:str
     mem_word: str
     feedback_star: int
@@ -56,6 +56,19 @@ def check_if_student_exists(student_data: StudentData, table=Student):
     with Session(engine) as session:
         statement = select(table).where(table.user_name==student_data.user_name,
                                         table.name==student_data.name,
+                                        table.mem_word==student_data.mem_word)
+        result = session.exec(statement=statement).all()
+        
+        # No student found
+        if len(result) == 0:
+            return False
+
+        return True
+
+# Checks if student exists in check_in
+def check_if_student_exists_check_in(student_data: StudentData, table=CheckIn):
+    with Session(engine) as session:
+        statement = select(table).where(table.user_name==student_data.user_name,
                                         table.mem_word==student_data.mem_word)
         result = session.exec(statement=statement).all()
         
@@ -116,20 +129,32 @@ def get_feedback_data():
 # Add check_out data, returns True if added
 def add_check_out(event_data: EventFeedbackData, table=EventFeedback, 
                   verify_table=CheckIn):
-    added_event = event_added(event_data=event_data.event, table=verify_table)
+    added_event = event_added(EventData(name=event_data.name,
+                                        date=event_data.date), table=verify_table)
     added_student = check_if_student_exists(
         StudentData(user_name=event_data.user_name, 
                     mem_word=event_data.mem_word), table=verify_table)
     flag = added_event and added_student
     with Session(engine) as session:
         if flag:
-            session.add(table(
-                name=event_data.event.name,
-                date=event_data.event.date,
-                user_name=event_data.user_name,
-                feedback_star=event_data.feedback_star,
-                feedback_message=event_data.feedback_message
-            ))
+            statement = select(table).where(table.name==event_data.name,
+                                        table.date==event_data.date,
+                                        table.user_name==event_data.user_name)
+            result = session.exec(statement=statement).all()
+        
+            # Duplication found
+            if len(result) != 0:
+                flag = False
+            
+            else:
+                session.add(table(
+                    name=event_data.name,
+                    date=event_data.date,
+                    user_name=event_data.user_name,
+                    feedback_star=event_data.feedbacK_star,
+                    feedbacK_msg=event_data.feedbacK_msg
+                ))
+        
         session.commit()
 
     return flag         
@@ -157,12 +182,13 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
             if len(result) != 0:
                 flag = False
             
-            session.add(table(
-                name=check_in_data.name,
-                date=check_in_data.date,
-                student_name=check_in_data.student_name,
-                user_name=check_in_data.user_name
-            ))
+            else:
+                session.add(table(
+                    name=check_in_data.name,
+                    date=check_in_data.date,
+                    student_name=check_in_data.student_name,
+                    user_name=check_in_data.user_name
+                ))
         session.commit()
 
     return flag        
@@ -175,6 +201,7 @@ if __name__ == "__main__":
                 user_name="fuzzywuzzy",
                 mem_word="insomnia")
     print(add_check_in(object))
+    print(get_event_at_specific_date)
     # new_student = StudentData(user_name="fuzzywuzzy", 
     #                           name="Mike Hawk", 
     #                           mem_word="insomnia")
