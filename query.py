@@ -54,6 +54,7 @@ def registered_student(student_data: StudentData, table=Student):
 def check_if_student_exists(student_data: StudentData, table=Student):
     with Session(engine) as session:
         statement = select(table).where(table.user_name==student_data.user_name,
+                                        table.name==student_data.name,
                                         table.mem_word==student_data.mem_word)
         result = session.exec(statement=statement).all()
         
