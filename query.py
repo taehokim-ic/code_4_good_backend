@@ -20,7 +20,8 @@ class EventData(BaseModel):
         orm_mode = True
 
 class CheckInData(BaseModel):
-    event: EventData
+    name: str
+    date: date
     student_name: str
     user_name: str 
     mem_word: str       
@@ -49,7 +50,7 @@ def registered_student(student_data: StudentData, table=Student):
             session.commit()
             return False
         
-# Checks if student exists in student database
+# Checks if student exists in database, Student database by default
 def check_if_student_exists(student_data: StudentData, table=Student):
     with Session(engine) as session:
         statement = select(table).where(table.user_name==student_data.user_name,
@@ -111,11 +112,12 @@ def get_feedback_data():
     pass
     
 # Add check_out data, returns True if added
-def add_check_out(event_data: EventFeedbackData, table=EventFeedback, verity_table=CheckIn):
-    added_event = event_added(event_data=event_data.event)
+def add_check_out(event_data: EventFeedbackData, table=EventFeedback, 
+                  verify_table=CheckIn):
+    added_event = event_added(event_data=event_data.event, table=verify_table)
     added_student = check_if_student_exists(
         StudentData(user_name=event_data.user_name, 
-                    mem_word=event_data.mem_word))
+                    mem_word=event_data.mem_word), table=verify_table)
     flag = added_event and added_student
     with Session(engine) as session:
         if flag:
@@ -132,7 +134,8 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback, verity_tab
 
 # Add check_in data, returns True if added
 def add_check_in(check_in_data: CheckInData, table=CheckIn):
-    added_event = event_added(event_data=check_in_data.event)
+    added_event = event_added(EventData(name=check_in_data.name,
+                                        date=check_in_data.date))
     added_student = check_if_student_exists(
         StudentData(user_name=check_in_data.user_name,
                     name=check_in_data.student_name, 
@@ -141,8 +144,8 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
     with Session(engine) as session:
         if flag:
             session.add(table(
-                name=check_in_data.event.name,
-                date=check_in_data.event.date,
+                name=check_in_data.name,
+                date=check_in_data.date,
                 student_name=check_in_data.student_name,
                 user_name=check_in_data.user_name
             ))
@@ -151,45 +154,51 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
     return flag        
         
 if __name__ == "__main__":
-    new_student = StudentData(user_name="fuzzywuzzy", 
-                              name="Mike Hawk", 
-                              mem_word="insomnia")
-    new_student1 = StudentData(user_name="buzzywuzzy", 
-                              name="John Doe", 
-                              mem_word="overworked")
-    new_student2 = StudentData(user_name="guardian_angel_154", 
-                              name="Nick Nicklas", 
-                              mem_word="anime")
+    object = CheckInData(name="Introduction To Python",
+                date=datetime(2022, 10, 29).date(),
+                student_name="John Doe",
+                user_name="fuzzywuzzy",
+                mem_word="insomnia")
+    print(add_check_in(object))
+    # new_student = StudentData(user_name="fuzzywuzzy", 
+    #                           name="Mike Hawk", 
+    #                           mem_word="insomnia")
+    # new_student1 = StudentData(user_name="buzzywuzzy", 
+    #                           name="John Doe", 
+    #                           mem_word="overworked")
+    # new_student2 = StudentData(user_name="guardian_angel_154", 
+    #                           name="Nick Nicklas", 
+    #                           mem_word="anime")
     
-    registered_student(new_student)
-    registered_student(new_student1)
-    registered_student(new_student2)
+    # registered_student(new_student)
+    # registered_student(new_student1)
+    # registered_student(new_student2)
     
-    new_event = EventData(name="Introduction To Python", date=datetime.today())
-    new_event1 = EventData(name="Introduction To Python", date=(datetime.today() + timedelta(days=7)))
-    new_event2 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=14))
-    new_event3 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=21))
+    # new_event = EventData(name="Introduction To Python", date=datetime.today())
+    # new_event1 = EventData(name="Introduction To Python", date=(datetime.today() + timedelta(days=7)))
+    # new_event2 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=14))
+    # new_event3 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=21))
     
-    new_event4 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=1))
-    new_event5 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=8))
-    new_event6 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=15))
+    # new_event4 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=1))
+    # new_event5 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=8))
+    # new_event6 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=15))
     
-    new_event7 = EventData(name="Introduction To Haskell", date=datetime.today())
-    new_event8 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=3))
-    new_event9 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=7))
-    new_event10 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=10))    
+    # new_event7 = EventData(name="Introduction To Haskell", date=datetime.today())
+    # new_event8 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=3))
+    # new_event9 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=7))
+    # new_event10 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=10))    
     
-    add_event_at_specific_date(new_event)
-    add_event_at_specific_date(new_event1)
-    add_event_at_specific_date(new_event2)
-    add_event_at_specific_date(new_event3)
-    add_event_at_specific_date(new_event4)
-    add_event_at_specific_date(new_event5)
-    add_event_at_specific_date(new_event6)
-    add_event_at_specific_date(new_event7)
-    add_event_at_specific_date(new_event8)
-    add_event_at_specific_date(new_event9)
-    add_event_at_specific_date(new_event10)
+    # add_event_at_specific_date(new_event)
+    # add_event_at_specific_date(new_event1)
+    # add_event_at_specific_date(new_event2)
+    # add_event_at_specific_date(new_event3)
+    # add_event_at_specific_date(new_event4)
+    # add_event_at_specific_date(new_event5)
+    # add_event_at_specific_date(new_event6)
+    # add_event_at_specific_date(new_event7)
+    # add_event_at_specific_date(new_event8)
+    # add_event_at_specific_date(new_event9)
+    # add_event_at_specific_date(new_event10)
     
     
-    print(get_all_events())
+    # print(get_all_events())
