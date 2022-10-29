@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from typing import Optional
 from sqlalchemy import table
 
@@ -13,17 +13,17 @@ class Student(SQLModel, table=True):
 class Events(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True)
     name: str = Field(index=True)
-    date: datetime
+    date: date
     
 class Volunteer(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True)
     name: str = Field(index=True)
-    date: datetime
+    date: date
     
 class EventFeedback(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True)
     name: str
-    date: datetime
+    date: date
     user_name: str
     feedback_star: int
     feedbacK_msg: str
