@@ -37,7 +37,7 @@ class EventFeedbackData(BaseModel):
     date: date
     user_name:str
     mem_word: str
-    feedback_star: int
+    feedback_star: str
     feedback_message: str
     
     class Config:
@@ -160,7 +160,7 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
                     name=event_data.name,
                     date=event_data.date,
                     user_name=event_data.user_name,
-                    feedback_star=event_data.feedback_star,
+                    feedback_star=int(event_data.feedback_star),
                     feedbacK_msg=event_data.feedback_message))
         
         session.commit()
@@ -206,12 +206,12 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
 if __name__ == "__main__":
     
     # print(get_all_events())
-    object = CheckInData(name="Introduction To Python",
-                date=datetime(2022, 10, 29).date(),
-                student_name="Mike Hawk",
-                user_name="fuzzywuzzy",
-                mem_word="insomnia")
-    print(add_check_in(object))
+    # object = CheckInData(name="Introduction To Python",
+    #             date=datetime(2022, 10, 29).date(),
+    #             student_name="Mike Hawk",
+    #             user_name="fuzzywuzzy",
+    #             mem_word="insomnia")
+    # add_check_in(object)
     new_student = StudentData(user_name="fuzzywuzzy", 
                               name="Mike Hawk", 
                               mem_word="insomnia")
@@ -252,16 +252,16 @@ if __name__ == "__main__":
     add_event_at_specific_date(new_event9)
     add_event_at_specific_date(new_event10)
     
-    object = EventFeedbackData(
-        name = "Introduction To Python",
-        date = "2022-10-29",
-        user_name = "fuzzywuzzy",
-        mem_word = "insomnia",
-        feedback_star= 40,
-        feedback_message= "terrible"
-    )
+    # object = EventFeedbackData(
+    #     name = "Introduction To Python",
+    #     date = "2022-10-29",
+    #     user_name = "fuzzywuzzy",
+    #     mem_word = "insomnia",
+    #     feedback_star= 40,
+    #     feedback_message= "terrible"
+    # )
     
-    print(add_check_out(object))
+    # print(add_check_out(object))
     
     
     # print(get_all_events())
