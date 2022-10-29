@@ -25,7 +25,7 @@ class EventFeedback(SQLModel, table=True):
     name: str
     date: date
     user_name: str
-    feedback_star: int
+    feedback_star: str
     feedback_msg: str
     
 class CheckIn(SQLModel, table=True):

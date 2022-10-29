@@ -103,7 +103,7 @@ def feedback_get(event: EventName):
             "message": "No Feedbacks"} 
     
     avg = sum(
-        [feedback.feedback_star for feedback in feedbacks]
+        [int(feedback.feedback_star) for feedback in feedbacks]
         ) / sum([1 for _ in feedbacks])
     
     feedback_messages = [feedback.feedback_msg for feedback in feedbacks]
