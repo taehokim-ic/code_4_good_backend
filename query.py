@@ -128,18 +128,15 @@ def get_feedback_data():
 # Add check_out data, returns True if added
 def add_check_out(event_data: EventFeedbackData, table=EventFeedback, 
                   verify_table=CheckIn):
-    flags = [True] * 2
     added_event = event_added(EventData(name=event_data.name,
                                         date=event_data.date), table=verify_table)
     added_student = check_if_student_exists_check_in(
         StudentData(user_name=event_data.user_name, 
                     mem_word=event_data.mem_word), table=verify_table)
     print(added_event, added_student)
-    flag_1 = added_event and added_student
-    flags[0] = flag_1
+    flag = added_event and added_student
     with Session(engine) as session:
-        if flag_1:
-            flag_2 = True
+        if flag:
             statement = select(table).where(table.name==event_data.name,
                                         table.date==event_data.date,
                                         table.user_name==event_data.user_name)
@@ -147,7 +144,7 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
         
             # Duplication found
             if len(result) != 0:
-                flag_2 = False
+                flag = False
             
             else:
                 session.add(table(
@@ -155,16 +152,33 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
                     date=event_data.date,
                     user_name=event_data.user_name,
                     feedback_star=event_data.feedback_star,
-                    feedbacK_msg=event_data.feedback_message
-                ))
-
-            flags[1] = flag_2
+                    feedbacK_msg=event_data.feedback_message))
+        
         session.commit()
 
-    return flags
+    return flag         
 
 # Add check_in data, returns True if added
+# class CheckInData(BaseModel):
+#     name: str
+#     date: date
+#     student_name: str
+#     user_name: str 
+#     mem_word: str  
+# class Student(SQLModel, table=True):
+#     id: Optional[int] = Field(primary_key=True)
+#     name: str = Field(index=True)
+#     user_name: str
+#     mem_word: str
+# class StudentData(BaseModel):
+#     user_name: str
+#     name: str = None
+#     mem_word: str
+    
+#     class Config:
+#         orm_mode = True
 def add_check_in(check_in_data: CheckInData, table=CheckIn):
+    flags = [True] * 2
     added_event = event_added(EventData(name=check_in_data.name,
                                         date=check_in_data.date), table=Events)
     added_student = check_if_student_exists(
@@ -174,6 +188,7 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
     
     print("added_student", added_student, added_event)
     flag = added_event and added_student
+    flags[0] = flag
     with Session(engine) as session:
         if flag:
             statement = select(table).where(table.name==check_in_data.name,
@@ -184,8 +199,8 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
         
             # Duplication found
             if len(result) != 0:
-                flag = False
-            
+                flag1 = False
+                flags[1] = flag1
             else:
                 session.add(table(
                     name=check_in_data.name,
@@ -193,9 +208,9 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
                     student_name=check_in_data.student_name,
                     user_name=check_in_data.user_name
                 ))
-        session.commit()
-
-    return flag        
+                session.commit()
+    print(flag)
+    return flags        
 
         
 if __name__ == "__main__":
