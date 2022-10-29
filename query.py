@@ -131,7 +131,7 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
             session.add(table(
                 name=check_in_data.event.name,
                 date=check_in_data.event.date,
-                name=check_in_data.student_name,
+                student_name=check_in_data.student_name,
                 user_name=check_in_data.user_name
             ))
         session.commit()
