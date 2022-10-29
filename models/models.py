@@ -27,3 +27,10 @@ class EventFeedback(SQLModel, table=True):
     user_name: str
     feedback_star: int
     feedbacK_msg: str
+    
+class CheckIn(SQLModel, table=True):
+    id: Optional[int] = Field(primary_key=True)
+    name: str
+    date: date
+    student_name: str
+    user_name: str
