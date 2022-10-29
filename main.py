@@ -96,17 +96,16 @@ def get_event_today():
 def feedback_get(event: EventName):
     feedbacks = get_feedback_for_specific_event(event.name)
     
-    if len(feedbacks) == 0:
+    if not feedbacks:
         return {
             "feedback": {"average": 0, "feedbacks": []}, 
-            "message": "No Feedbacks"
-        } 
-
+            "message": "No Feedbacks"} 
+    
     avg = sum(
-        [int(feedback.feedback_star) for feedback in feedbacks]
-        ) / len(feedbacks)
-    feedback_messages = [feedback.feedback_messages for feedback in feedbacks]
+        [feedback.feedback_star for feedback in feedbacks]
+        ) / sum([1 for _ in feedbacks])
+    
+    feedback_messages = [feedback.feedback_message for feedback in feedbacks]
     return {
-            "feedback": {"average": avg, "feedbacks": feedback_messages}, 
-            "message": "Success"
-        } 
+            "feedback": {"average": int(avg), "feedbacks": feedback_messages}, 
+            "message": "Success"}
