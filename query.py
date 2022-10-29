@@ -128,15 +128,18 @@ def get_feedback_data():
 # Add check_out data, returns True if added
 def add_check_out(event_data: EventFeedbackData, table=EventFeedback, 
                   verify_table=CheckIn):
+    flags = [True] * 2
     added_event = event_added(EventData(name=event_data.name,
                                         date=event_data.date), table=verify_table)
     added_student = check_if_student_exists_check_in(
         StudentData(user_name=event_data.user_name, 
                     mem_word=event_data.mem_word), table=verify_table)
     print(added_event, added_student)
-    flag = added_event and added_student
+    flag_1 = added_event and added_student
+    flags[0] = flag_1
     with Session(engine) as session:
-        if flag:
+        if flag_1:
+            flag_2 = True
             statement = select(table).where(table.name==event_data.name,
                                         table.date==event_data.date,
                                         table.user_name==event_data.user_name)
@@ -144,7 +147,7 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
         
             # Duplication found
             if len(result) != 0:
-                flag = False
+                flag_2 = False
             
             else:
                 session.add(table(
@@ -154,10 +157,11 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
                     feedback_star=event_data.feedback_star,
                     feedbacK_msg=event_data.feedback_message
                 ))
-        
+
+            flags[1] = flag_2
         session.commit()
 
-    return flag         
+    return flags
 
 # Add check_in data, returns True if added
 def add_check_in(check_in_data: CheckInData, table=CheckIn):

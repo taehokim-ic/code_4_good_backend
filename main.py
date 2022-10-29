@@ -44,10 +44,12 @@ def register_student(student_data: StudentData = None):
 def check_in(check_in: CheckInData):
     check_in_added = add_check_in(check_in_data=check_in)
     
-    if check_in_added:
-        return {"message": "Check-in Successful."}
-    else:
+    if not check_in_added[0]:
         return {"message": "Invalid Data, Check Values Again."}
+    elif not check_in_added[1]:
+        return {"message": "Already Checked In."}
+    else:
+        return {"message": "Check-in Successful."}
    
 # Check Out
 @app.post('/ignitehub/api/v1/check_out')
