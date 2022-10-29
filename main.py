@@ -86,7 +86,7 @@ def events_get():
 # Events Available Today
 @app.get('/ignitehub/api/v1/event_today')
 def get_event_today():
-    events = get_event_at_specific_date(datetime.today())
+    events = get_event_at_specific_date(datetime.today().date())
     
     return {"events": [event for event in events]}
     
