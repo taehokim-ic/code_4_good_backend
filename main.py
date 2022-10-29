@@ -92,7 +92,7 @@ def get_event_today():
     return {"events": [event for event in events]}
     
 # Get Feedback
-@app.get('/ignitehub/api/v1/feedback')
+@app.post('/ignitehub/api/v1/feedback')
 def feedback_get(event: EventName):
     feedbacks = get_feedback_for_specific_event(event.name)
     
