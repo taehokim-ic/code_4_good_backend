@@ -92,9 +92,10 @@ def get_event_today():
     return {"events": [event for event in events]}
     
 # Get Feedback
-@app.get('/ignitehub/api/v1/feedback')
+@app.post('/ignitehub/api/v1/feedback')
 def feedback_get(event: EventName):
     feedbacks = get_feedback_for_specific_event(event.name)
+    print(feedbacks)
     
     if not feedbacks:
         return {
@@ -105,7 +106,8 @@ def feedback_get(event: EventName):
         [feedback.feedback_star for feedback in feedbacks]
         ) / sum([1 for _ in feedbacks])
     
-    feedback_messages = [feedback.feedback_message for feedback in feedbacks]
+    feedback_messages = [feedback.feedback_msg for feedback in feedbacks]
+    print(feedback_messages)
     return {
             "feedback": {"average": int(avg), "feedbacks": feedback_messages}, 
             "message": "Success"}

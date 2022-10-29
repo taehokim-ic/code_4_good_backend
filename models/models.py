@@ -26,7 +26,7 @@ class EventFeedback(SQLModel, table=True):
     date: date
     user_name: str
     feedback_star: int
-    feedbacK_msg: str
+    feedback_msg: str
     
 class CheckIn(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True)
