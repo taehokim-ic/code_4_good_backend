@@ -131,7 +131,7 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
                   verify_table=CheckIn):
     added_event = event_added(EventData(name=event_data.name,
                                         date=event_data.date), table=verify_table)
-    added_student = check_if_student_exists(
+    added_student = check_if_student_exists_check_in(
         StudentData(user_name=event_data.user_name, 
                     mem_word=event_data.mem_word), table=verify_table)
     flag = added_event and added_student
