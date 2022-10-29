@@ -206,77 +206,77 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
 if __name__ == "__main__":
     
     # print(get_all_events())
-    object = CheckInData(name="Introduction To Python",
-                date=datetime(2022, 10, 29).date(),
-                student_name="Mike Hawk",
-                user_name="fuzzywuzzy",
-                mem_word="insomnia")
-    add_check_in(object)
-    # new_student = StudentData(user_name="fuzzywuzzy", 
-    #                           name="Mike Hawk", 
-    #                           mem_word="insomnia")
-    # new_student1 = StudentData(user_name="buzzywuzzy", 
-    #                           name="John Doe", 
-    #                           mem_word="overworked")
-    # new_student2 = StudentData(user_name="guardian_angel_154", 
-    #                           name="Nick Nicklas", 
-    #                           mem_word="anime")
+    # object = CheckInData(name="Introduction To Python",
+    #             date=datetime(2022, 10, 29).date(),
+    #             student_name="Mike Hawk",
+    #             user_name="fuzzywuzzy",
+    #             mem_word="insomnia")
+    # add_check_in(object)
+    new_student = StudentData(user_name="fuzzywuzzy", 
+                              name="Mike Hawk", 
+                              mem_word="insomnia")
+    new_student1 = StudentData(user_name="buzzywuzzy", 
+                              name="John Doe", 
+                              mem_word="overworked")
+    new_student2 = StudentData(user_name="guardian_angel_154", 
+                              name="Nick Nicklas", 
+                              mem_word="anime")
     
-    # registered_student(new_student)
-    # registered_student(new_student1)
-    # registered_student(new_student2)
+    registered_student(new_student)
+    registered_student(new_student1)
+    registered_student(new_student2)
     
-    # new_event = EventData(name="Introduction To Python", date=datetime.today())
-    # new_event1 = EventData(name="Introduction To Python", date=(datetime.today() + timedelta(days=7)))
-    # new_event2 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=14))
-    # new_event3 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=21))
+    new_event = EventData(name="Introduction To Python", date=datetime.today())
+    new_event1 = EventData(name="Introduction To Python", date=(datetime.today() + timedelta(days=7)))
+    new_event2 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=14))
+    new_event3 = EventData(name="Introduction To Python", date=datetime.today() + timedelta(days=21))
     
-    # new_event4 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=1))
-    # new_event5 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=8))
-    # new_event6 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=15))
+    new_event4 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=1))
+    new_event5 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=8))
+    new_event6 = EventData(name="Introduction To Java", date=datetime.today() + timedelta(days=15))
     
-    # new_event7 = EventData(name="Introduction To Haskell", date=datetime.today())
-    # new_event8 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=3))
-    # new_event9 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=7))
-    # new_event10 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=10))    
+    new_event7 = EventData(name="Introduction To Haskell", date=datetime.today())
+    new_event8 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=3))
+    new_event9 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=7))
+    new_event10 = EventData(name="Introduction To Haskell", date=datetime.today() + timedelta(days=10))    
     
-    # add_event_at_specific_date(new_event)
-    # add_event_at_specific_date(new_event1)
-    # add_event_at_specific_date(new_event2)
-    # add_event_at_specific_date(new_event3)
-    # add_event_at_specific_date(new_event4)
-    # add_event_at_specific_date(new_event5)
-    # add_event_at_specific_date(new_event6)
-    # add_event_at_specific_date(new_event7)
-    # add_event_at_specific_date(new_event8)
-    # add_event_at_specific_date(new_event9)
-    # add_event_at_specific_date(new_event10)
+    add_event_at_specific_date(new_event)
+    add_event_at_specific_date(new_event1)
+    add_event_at_specific_date(new_event2)
+    add_event_at_specific_date(new_event3)
+    add_event_at_specific_date(new_event4)
+    add_event_at_specific_date(new_event5)
+    add_event_at_specific_date(new_event6)
+    add_event_at_specific_date(new_event7)
+    add_event_at_specific_date(new_event8)
+    add_event_at_specific_date(new_event9)
+    add_event_at_specific_date(new_event10)
     
-    object = EventFeedbackData(
-        name = "Introduction To Python",
-        date = "2022-10-29",
-        user_name = "fuzzywuzzy",
-        mem_word = "insomnia",
-        feedback_star= "40",
-        feedback_message = "terrible"
-    )
+    # object = EventFeedbackData(
+    #     name = "Introduction To Python",
+    #     date = "2022-10-29",
+    #     user_name = "fuzzywuzzy",
+    #     mem_word = "insomnia",
+    #     feedback_star= "40",
+    #     feedback_message = "terrible"
+    # )
     
-    object1 = CheckInData(name="Introduction To Python",
-                date=datetime(2022, 11, 12).date(),
-                student_name="John Doe",
-                user_name="buzzywuzzy",
-                mem_word="overworked")
-    add_check_in(object1)
+    # object1 = CheckInData(name="Introduction To Python",
+    #             date=datetime(2022, 11, 12).date(),
+    #             student_name="John Doe",
+    #             user_name="buzzywuzzy",
+    #             mem_word="overworked")
+    # add_check_in(object1)
     
-    object1 = EventFeedbackData(
-        name = "Introduction To Python",
-        date = "2022-11-12",
-        user_name = "buzzywuzzy",
-        mem_word = "overworkd",
-        feedback_star= "69",
-        feedback_message = "average"
-    )
-    add_check_out(object)
-    add_check_out(object1)
+    # object1 = EventFeedbackData(
+    #     name = "Introduction To Python",
+    #     date = "2022-11-12",
+    #     user_name = "buzzywuzzy",
+    #     mem_word = "overworkd",
+    #     feedback_star= "69",
+    #     feedback_message = "average"
+    # )
+    # add_check_out(object)
+    # add_check_out(object1)
     
     # print(get_all_events())
