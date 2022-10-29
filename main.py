@@ -11,7 +11,6 @@ async def catch_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception:
-        # you probably want some kind of logging here
         return Response("Internal server error", status_code=500)
         
 app.middleware('http')(catch_exceptions_middleware)
@@ -83,7 +82,7 @@ def events_get():
 def events_get():
     events = get_all_events()
 
-    return {"events": [event for event in events]}    
+    return {"events": events}    
     
 # Events Available Today
 @app.get('/ignitehub/api/v1/event_today')
@@ -94,7 +93,7 @@ def get_event_today():
     
 # Get Feedback
 @app.get('/ignitehub/api/v1/feedback')
-def feedback_get(event: str):
+def feedback_get(event: EventName):
     feedbacks = get_feedback_for_specific_event(event)
     
     if len(feedbacks) == 0:

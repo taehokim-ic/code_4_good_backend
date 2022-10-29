@@ -19,6 +19,12 @@ class EventData(BaseModel):
     class Config:
         orm_mode = True
 
+class EventName(BaseModel):
+    name: str
+    
+    class Config:
+        orm_mode = True
+
 class CheckInData(BaseModel):
     name: str
     date: date
@@ -162,24 +168,6 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
     return flag         
 
 # Add check_in data, returns True if added
-# class CheckInData(BaseModel):
-#     name: str
-#     date: date
-#     student_name: str
-#     user_name: str 
-#     mem_word: str  
-# class Student(SQLModel, table=True):
-#     id: Optional[int] = Field(primary_key=True)
-#     name: str = Field(index=True)
-#     user_name: str
-#     mem_word: str
-# class StudentData(BaseModel):
-#     user_name: str
-#     name: str = None
-#     mem_word: str
-    
-#     class Config:
-#         orm_mode = True
 def add_check_in(check_in_data: CheckInData, table=CheckIn):
     flags = [True] * 2
     added_event = event_added(EventData(name=check_in_data.name,
@@ -189,7 +177,6 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
                     name=check_in_data.student_name, 
                     mem_word=check_in_data.mem_word))
     
-    print("added_student", added_student, added_event)
     flag = added_event and added_student
     flags[0] = flag
     with Session(engine) as session:
@@ -225,7 +212,7 @@ if __name__ == "__main__":
         feedback_star= 40,
         feedback_message= "terrible"
     )
-    print(add_check_out(object))
+    print(get_all_events())
     # object = CheckInData(name="Introduction To Python",
     #             date=datetime(2022, 10, 28).date(),
     #             student_name="Mike Hawk",
