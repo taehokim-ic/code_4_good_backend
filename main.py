@@ -39,6 +39,16 @@ def register_student(student_data: StudentData = None):
     else:
         return {"message": "Fail"}
    
+# Check In
+@app.post('/ignitehub/api/v1/check_in')
+def check_in(event: EventFeedbackData):
+    check_in_added = add_check_in(event_data=event)
+    
+    if check_in_added:
+        return {"message": "Check-in Successful."}
+    else:
+        return {"message": "Invalid Data, Check Values Again."}
+        
 # Add Event
 @app.post('/ignitehub/api/v1/add_event')
 def add_event(event: EventData):

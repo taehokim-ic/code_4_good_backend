@@ -4,7 +4,7 @@ from db import engine
 from models.models import *
 from sqlmodel import Session, select, or_
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime
 
 class StudentData(BaseModel):
     user_name: str
