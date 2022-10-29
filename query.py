@@ -1,8 +1,6 @@
-from audioop import add
-from backend.models.models import EventFeedback
 from db import engine
 from models.models import *
-from sqlmodel import Session, select, or_
+from sqlmodel import Session, select
 from pydantic import BaseModel
 from datetime import datetime
 
