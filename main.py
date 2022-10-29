@@ -41,7 +41,7 @@ def register_student(student_data: StudentData = None):
 
 # Check Out
 @app.post('/ignitehub/api/v1/check_in')
-def check_in(event: EventFeedbackData):
+def check_in(event: CheckInData):
     check_in_added = add_check_in(event_data=event)
     
     if check_in_added:
@@ -93,5 +93,6 @@ def get_event_today():
 # Get Feedback
 @app.get('/ignitehub/api/v1/feedback')
 def feedback_get():
+    
 
     return {"message": "NEEDS WORK"}
