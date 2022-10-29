@@ -27,6 +27,9 @@ class EventFeedbackData(BaseModel):
     mem_word: str
     feedback_star: int
     feedback_message: str
+    
+    class Config:
+        orm_mode = True
 
 # Adds student to student database, returns False if student exists    
 def registered_student(student_data: StudentData, table=Student):
