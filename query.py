@@ -1,4 +1,5 @@
 from audioop import add
+from backend.models.models import EventFeedback
 from db import engine
 from models.models import *
 from sqlmodel import Session, select, or_
@@ -7,7 +8,7 @@ from datetime import date
 
 class StudentData(BaseModel):
     user_name: str
-    name: str
+    name: str = None
     mem_word: str
     
     class Config:
@@ -19,28 +20,15 @@ class EventData(BaseModel):
 
     class Config:
         orm_mode = True
+        
+class EventFeedbackData(BaseModel):
+    event: EventData
+    user_name:str
+    mem_word: str
+    feedback_star: int
+    feedback_message: str
 
-# def select_no_category_table(table):
-#     with Session(engine) as session:
-#         statement = select(table)
-#         result = session.exec(statement)
-#         first = result.all()
-#         print(first)
-#         if not first:
-#             return []
-#         return [(row.keyword, row.link) for row in first]
-
-# def select_category_table(table, category):
-#     with Session(engine) as session:
-#         statement = select(table).where(table.category == category)
-#         result = session.exec(statement)
-#         first = result.all()
-#         if not first:
-#             return []
-#         return [(row.keyword, row.link) for row in first]
-
-
-# Adds student to stuednt database, returns False if student exists    
+# Adds student to student database, returns False if student exists    
 def registered_student(student_data: StudentData, table=Student):
     student_exists = check_if_student_exists(student_data=student_data) 
     with Session(engine) as session:    
@@ -89,6 +77,39 @@ def add_event_at_specific_date(event_data: EventData, table=Events):
         session.add(table(name=event_data.name, 
                           date=event_data.date))
         session.commit()
+        
+# Checks if event has been added
+def event_added(event_data: EventData, table=Events):
+    with Session(engine) as session:
+        statement = select(table).where(table.name==event_data.name,
+                                        table.date==event_data.date)
+        result = session.exec(statement=statement).all()
+        
+        # No event found
+        if len(result) == 0:
+            return False
+
+        return True
+
+# Add check_in data, returns True if added
+def add_check_in(event_data: EventFeedbackData, table=EventFeedback):
+    added_event = event_added(event_data=event_data.event)
+    added_student = check_if_student_exists(
+        StudentData(user_name=event_data.user_name, 
+                    mem_word=event_data.mem_word))
+    flag = added_event and added_student
+    with Session(engine) as session:
+        if flag:
+            session.add(table(
+                name=event_data.event.name,
+                date=event_data.event.date,
+                user_name=event_data.user_name,
+                feedback_star=event_data.feedback_star,
+                feedback_message=event_data.feedback_message
+            ))
+        session.commit()
+
+    return flag         
         
 if __name__ == "__main__":
     new_student = EventData(name="TD22Dho", date=datetime.today())
