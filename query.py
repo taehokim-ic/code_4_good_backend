@@ -106,6 +106,10 @@ def event_added(event_data: EventData, table=Events):
 
         return True
 
+# Returns list of feedbacks_msgs and an average of feedback_star 
+def get_feedback_data():
+    pass
+    
 # Add check_out data, returns True if added
 def add_check_out(event_data: EventFeedbackData, table=EventFeedback, verity_table=CheckIn):
     added_event = event_added(event_data=event_data.event)
