@@ -14,7 +14,7 @@ class StudentData(BaseModel):
         
 class EventData(BaseModel):
     name: str
-    date: date
+    date: date = None
 
     class Config:
         orm_mode = True
@@ -100,7 +100,14 @@ def get_all_events(table=Events):
         result = session.exec(statement=statement).all()
         
         return result
-    
+
+def get_feedback_for_specific_event(name: str, table=EventFeedback):
+    with Session(engine) as session:
+        statement = select(table).where(table.name==name)
+        result = session.exec(statement=statement).all()
+        
+        return result
+        
 # Add event for specific date
 def add_event_at_specific_date(event_data: EventData, table=Events):
     with Session(engine) as session:
@@ -121,10 +128,6 @@ def event_added(event_data: EventData, table=Events):
 
         return True
 
-# Returns list of feedbacks_msgs and an average of feedback_star 
-def get_feedback_data():
-    pass
-    
 # Add check_out data, returns True if added
 def add_check_out(event_data: EventFeedbackData, table=EventFeedback, 
                   verify_table=CheckIn):

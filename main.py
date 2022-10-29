@@ -94,8 +94,20 @@ def get_event_today():
     
 # Get Feedback
 @app.get('/ignitehub/api/v1/feedback')
-def feedback_get():
+def feedback_get(event: EventData):
+    feedbacks = get_feedback_for_specific_event(event.name)
     
+    if len(feedbacks) == 0:
+        return {
+            "feedback": {"average": 0, "feedbacks": []}, 
+            "message": "No Feedbacks"
+        } 
 
-    
-    return {"message": "NEEDS WORK"}
+    avg = sum(
+        [int(feedback.feedback_star) for feedback in feedbacks]
+        ) / len(feedbacks)
+    feedback_messages = [feedback.feedback_messages for feedback in feedbacks]
+    return {
+            "feedback": {"average": avg, "feedbacks": feedback_messages}, 
+            "message": "Success"
+        } 
