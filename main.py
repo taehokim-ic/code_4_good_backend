@@ -94,8 +94,8 @@ def get_event_today():
     
 # Get Feedback
 @app.get('/ignitehub/api/v1/feedback')
-def feedback_get(event: EventData):
-    feedbacks = get_feedback_for_specific_event(event.name)
+def feedback_get(event: str):
+    feedbacks = get_feedback_for_specific_event(event)
     
     if len(feedbacks) == 0:
         return {
