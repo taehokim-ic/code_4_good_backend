@@ -27,7 +27,8 @@ class CheckInData(BaseModel):
     mem_word: str       
 
 class EventFeedbackData(BaseModel):
-    event: EventData
+    name: str
+    data: date
     user_name:str
     mem_word: str
     feedback_star: int
@@ -136,14 +137,26 @@ def add_check_out(event_data: EventFeedbackData, table=EventFeedback,
 # Add check_in data, returns True if added
 def add_check_in(check_in_data: CheckInData, table=CheckIn):
     added_event = event_added(EventData(name=check_in_data.name,
-                                        date=check_in_data.date))
+                                        date=check_in_data.date), table=Events)
     added_student = check_if_student_exists(
         StudentData(user_name=check_in_data.user_name,
                     name=check_in_data.student_name, 
                     mem_word=check_in_data.mem_word))
+    
+    print("added_student", added_student, added_event)
     flag = added_event and added_student
     with Session(engine) as session:
         if flag:
+            statement = select(table).where(table.name==check_in_data.name,
+                                        table.date==check_in_data.date,
+                                        table.student_name==check_in_data.student_name,
+                                        table.user_name==check_in_data.user_name)
+            result = session.exec(statement=statement).all()
+        
+            # Duplication found
+            if len(result) != 0:
+                flag = False
+            
             session.add(table(
                 name=check_in_data.name,
                 date=check_in_data.date,
@@ -153,11 +166,12 @@ def add_check_in(check_in_data: CheckInData, table=CheckIn):
         session.commit()
 
     return flag        
+
         
 if __name__ == "__main__":
     object = CheckInData(name="Introduction To Python",
-                date=datetime(2022, 10, 29).date(),
-                student_name="John Doe",
+                date=datetime(2022, 10, 28).date(),
+                student_name="Mike Hawk",
                 user_name="fuzzywuzzy",
                 mem_word="insomnia")
     print(add_check_in(object))
