@@ -78,6 +78,14 @@ def get_event_at_specific_date(date: date, table=Events):
         
         return result
     
+# Getting events for a certain date
+def get_all_events(table=Events):
+    with Session(engine) as session:
+        statement = select(table.name).distinct()
+        result = session.exec(statement=statement).all()
+        
+        return result
+    
 # Add event for specific date
 def add_event_at_specific_date(event_data: EventData, table=Events):
     with Session(engine) as session:
@@ -99,7 +107,7 @@ def event_added(event_data: EventData, table=Events):
         return True
 
 # Add check_out data, returns True if added
-def add_check_out(event_data: EventFeedbackData, table=EventFeedback):
+def add_check_out(event_data: EventFeedbackData, table=EventFeedback, verity_table=CheckIn):
     added_event = event_added(event_data=event_data.event)
     added_student = check_if_student_exists(
         StudentData(user_name=event_data.user_name, 
@@ -179,4 +187,5 @@ if __name__ == "__main__":
     add_event_at_specific_date(new_event9)
     add_event_at_specific_date(new_event10)
     
-    print(get_event_on_or_after_specific_date(datetime.today() + timedelta(days=20)))
+    
+    print(get_all_events())

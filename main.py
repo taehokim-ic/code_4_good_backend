@@ -75,6 +75,13 @@ def events_get():
     events = get_event_on_or_after_specific_date(datetime.today())
 
     return {"events": [event for event in events]}
+
+# Get All Events
+@app.get('/ignitehub/api/v1/all_events')
+def events_get():
+    events = get_all_events()
+
+    return {"events": [event for event in events]}    
     
 # Events Available Today
 @app.get('/ignitehub/api/v1/event_today')
@@ -83,3 +90,8 @@ def get_event_today():
     
     return {"events": [event for event in events]}
     
+# Get Feedback
+@app.get('/ignitehub/api/v1/feedback')
+def feedback_get():
+
+    return {"message": "NEEDS WORK"}
