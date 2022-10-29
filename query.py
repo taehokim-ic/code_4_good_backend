@@ -18,7 +18,13 @@ class EventData(BaseModel):
 
     class Config:
         orm_mode = True
-        
+
+class CheckInData(BaseModel):
+    event: EventData
+    student_name: str
+    user_name: str 
+    mem_word: str       
+
 class EventFeedbackData(BaseModel):
     event: EventData
     user_name:str
@@ -92,8 +98,8 @@ def event_added(event_data: EventData, table=Events):
 
         return True
 
-# Add check_in data, returns True if added
-def add_check_in(event_data: EventFeedbackData, table=EventFeedback):
+# Add check_out data, returns True if added
+def add_check_out(event_data: EventFeedbackData, table=EventFeedback):
     added_event = event_added(event_data=event_data.event)
     added_student = check_if_student_exists(
         StudentData(user_name=event_data.user_name, 
@@ -111,6 +117,26 @@ def add_check_in(event_data: EventFeedbackData, table=EventFeedback):
         session.commit()
 
     return flag         
+
+# Add check_in data, returns True if added
+def add_check_in(check_in_data: CheckInData, table=CheckIn):
+    added_event = event_added(event_data=check_in_data.event)
+    added_student = check_if_student_exists(
+        StudentData(user_name=check_in_data.user_name,
+                    name=check_in_data.student_name, 
+                    mem_word=check_in_data.mem_word))
+    flag = added_event and added_student
+    with Session(engine) as session:
+        if flag:
+            session.add(table(
+                name=check_in_data.event.name,
+                date=check_in_data.event.date,
+                name=check_in_data.student_name,
+                user_name=check_in_data.user_name
+            ))
+        session.commit()
+
+    return flag        
         
 if __name__ == "__main__":
     new_student = StudentData(user_name="fuzzywuzzy", 
